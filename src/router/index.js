@@ -14,6 +14,7 @@ const CategoryListPage = () => import( /* webpackChunkName: "List" */ '@/pages/c
 const OrderListPage = () => import( /* webpackChunkName: "List" */ '@/pages/order/index.vue');
 const UserListPage = () => import( /* webpackChunkName: "List" */ '@/pages/user/index.vue');
 const CouponPage = () => import( /* webpackChunkName: "List" */ '@/pages/coupon/index.vue');
+const NotFoundPage = () => import( /* webpackChunkName: "List" */ '@/pages/404.vue');
 
 let commonComponents = [{
   path: '/',
@@ -63,7 +64,7 @@ let commonComponents = [{
 }, {
   path: '/login',
   component: LoginLoadPage
-}]
+}, { path: '*', component: NotFoundPage }]
 
 const router = new Router({
   mode: 'history',

@@ -22,7 +22,7 @@ service.interceptors.response.use(
   },
   error => {
     if(error.response && error.response.status == 404){
-    // router.push('/blank.vue')
+     router.push('/404')
     }
    
         
