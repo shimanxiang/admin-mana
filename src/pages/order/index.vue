@@ -1,6 +1,6 @@
 <template>
   <div class="orderlist tableData">
-    <div class="orderList">
+    <div class="orderList" v-show="!isDetail">
       <el-row class="top-box">
         <el-input
           class="search-input"
@@ -54,27 +54,42 @@
           label="创建时间"
           prop="createTime">
         </el-table-column>
+        <el-table-column
+          label="操作">
+          <template slot-scope="scope">
+            <el-button
+              size="mini"
+              type="primary"
+              @click="showDetail(scope.row.orderInfoId)">详情</el-button>
+          </template>
+        </el-table-column>
       </el-table>
-    </div>
-    <el-pagination
+      <el-pagination
         class="formPagination"
         background
         layout="prev, pager, next"
         :total="total"
         @current-change="currentChange"
     ></el-pagination>
+    </div>
+    <detail v-show="isDetail" :orderId="orderId" v-on:cancel="closeForm"></detail>
   </div>
 </template>
 
 <script>
 import { getOrderList } from '@/request/api'
+import detail from './components/detail.vue'
 export default {
   name: "orderlist",
+  components:{
+    detail
+  },
   data() {
     return {
       pageIndex: 1,
       pageSize: 10,
       searchValue: '',
+      isDetail: false,
       statusObj: {
         '1': '待支付',
         '2': '待发货',
@@ -85,13 +100,21 @@ export default {
       status: '', // 状态-展示 1-待支付 、2-待发货 、3-待收获、4-待评价
       loading: false,
       orderList: [],
-      total: 0
+      total: 0,
+      orderId: ''
     };
   },
   methods: {
+    showDetail (id) {
+      this.orderId = id
+      this.isDetail = true
+    },
     currentChange(index) {
       this.pageIndex = index
       this.getOrderList()
+    },
+    closeForm() {
+      this.isDetail = false
     },
     getOrderList() {
       if (this.loading) return false
@@ -116,6 +139,10 @@ export default {
     }
   },
   mounted () {
+    console.log(this.$route)
+    if (this.$route.query.name) {
+      this.searchValue = decodeURIComponent(this.$route.query.name)
+    }
     this.getOrderList()
   }
 };

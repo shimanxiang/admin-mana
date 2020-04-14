@@ -22,6 +22,11 @@ const menus = [{
         icon: 'el-icon-postcard',
     },
     {
+        path: '/carousel',
+        name: '轮播图管理',
+        icon: 'el-icon-picture-outline',
+    },
+    {
         path: '/orderlist',
         name: '订单列表',
         icon: 'el-icon-shopping-cart-2'

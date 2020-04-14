@@ -23,6 +23,7 @@
 
 <script>
 import Vue from "vue";
+import { login } from '@/request/api'
 export default {
   name: "login",
   data() {
@@ -47,28 +48,28 @@ export default {
         return;
       }
       this.isLoading = true;
-      this.$api["LoginService"]
-        .loginApi({
-          account: this.formData.account,
+      login({
+          userName: this.formData.account,
           password: this.$md5(this.formData.password)
         })
         .then(res => {
           this.isLoading = false;
-          if (res.data.Success) {
+          if (res.status === 200 && res.data.resultCode === '000001') {
             this.$store.commit("setPersonInfo", this.formData);
             this.$store.commit("setIsLogin", true);
             localStorage.setItem('isLogin', 'true');
             this.$message.success("登录成功");
             this.$router.push('/');
           } else {
-            this.$message.error(res.data.Message);
+            this.$message.error(res.data.resultObject);
           }
         })
         .catch(err => {
+          console.log(err)
           this.isLoading = false;
           localStorage.setItem('isLogin', 'true');
           this.$router.push('/');
-          this.$message.error("服务器出现差错");
+          this.$message.error('登录失败');
         });
     }
   }

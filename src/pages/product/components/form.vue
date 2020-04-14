@@ -2,36 +2,29 @@
   <div class="edit-product">
     <el-form :model="productForm" :rules="rules" ref="productForm" label-width="140px" class="demo-productForm">
         <el-form-item label="商品名称" prop="prodName">
-            <el-input v-model="productForm.prodName"></el-input>
+          <el-input v-model="productForm.prodName"></el-input>
         </el-form-item>
         <el-form-item label="商品描述" prop="prodDesc">
-            <el-input v-model="productForm.prodDesc"></el-input>
+          <el-input v-model="productForm.prodDesc"></el-input>
         </el-form-item>
         <el-form-item label="商品类别" prop="categoryId">
-            <el-select v-model="productForm.categoryId" placeholder="请选择">
-                <el-option :label="item.catogeryName" :value="item.id" v-for="item in categorysList" :key="item.id"></el-option>
-            </el-select>
+          <el-select v-model="productForm.categoryId" placeholder="请选择">
+            <el-option :label="item.catogeryName" :value="item.id" v-for="item in categorysList" :key="item.id"></el-option>
+          </el-select>
         </el-form-item>
         <el-form-item label="商品详情" prop="details">
             <el-input type="textarea" v-model="productForm.details"></el-input>
         </el-form-item>
         <el-form-item label="是否在首页显示" prop="isShowOnIndex">
-            <el-select v-model="productForm.isShowOnIndex" placeholder="请选择">
-                <el-option label="是" value="1"></el-option>
-                <el-option label="否" value="0"></el-option>
-            </el-select>
-        </el-form-item>
-        <el-form-item label="单位" prop="unit">
-            <el-select v-model="productForm.unit" placeholder="请选择">
-            <el-option label="斤" value="1"></el-option>
-            <el-option label="份" value="2"></el-option>
-            </el-select>
+          <el-select v-model="productForm.isShowOnIndex" placeholder="请选择">
+              <el-option label="是" value="1"></el-option>
+              <el-option label="否" value="0"></el-option>
+          </el-select>
         </el-form-item>
         <el-form-item label="商品类型" prop="prodType">
-            <el-select v-model="productForm.prodType" placeholder="请选择">
-            <el-option label="类型一" value="1"></el-option>
-            <el-option label="类型二" value="2"></el-option>
-            </el-select>
+          <el-select v-model="productForm.prodType" placeholder="请选择">
+            <el-option :label="item.name" :value="item.id" v-for="item in productType" :key="item.id"></el-option>
+          </el-select>
         </el-form-item>
         <el-form-item label="商品主图" prop="mainImg">
             <el-upload
@@ -47,18 +40,15 @@
         </el-form-item>
         <el-form-item label="商品副图" prop="fileList">
             <el-upload
-                action="https://jsonplaceholder.typicode.com/posts/"
+                action="/api/file/fileUpload"
                 list-type="picture-card"
+                :data="{type: 'P'}"
                 :limit="3"
-                :auto-upload="false"
-                :file-list="fileList"
-                :on-preview="handlePictureCardPreview"
-                :on-remove="handleRemove">
+                :file-list="productForm.fileList"
+                :on-success="handlePictureCardSuccess"
+                :before-upload="beforeAvatarUpload">
                 <i class="el-icon-plus"></i>
             </el-upload>
-            <el-dialog :visible.sync="dialogVisible">
-                <img width="100%" :src="dialogImageUrl" alt="">
-            </el-dialog>
         </el-form-item>
         <el-form-item>
             <el-button type="primary" @click="submitForm('productForm')">{{btnTxt}}</el-button>
@@ -68,24 +58,23 @@
   </div>
 </template>  
 <script>
-  import { getListCategorys, addProduct, updateProduct } from '@/request/api'
+  import { getListCategorys, addProduct, updateProduct, getProductType } from '@/request/api'
   export default {
     data() {
       return {
-        dialogImageUrl: '',
-        dialogVisible: false,
         categorysList: [], // 商品类别
         btnTxt: '立即创建',
-        fileList: [],
+        productType: [],
         productForm: {
+          categoryId: '',
           prodDesc: '', // 商品描述
           prodName: '', // 商品名称
           details: '',
           prodType: '',
           isShowOnIndex: '',
-          unit: '',
-          mainImg: '/static/images/potato.png',
-          secondImg: ['/static/images/potato.png']
+          mainImg: '',
+          secondImg: '',
+          fileList: []
         },
         rules: {
           prodName: [
@@ -94,7 +83,7 @@
           ],
           prodDesc: [
             { required: true, message: '请输入商品描述', trigger: 'blur' },
-            { min: 1, max: 8, message: '长度在 1 到 12 个字符', trigger: 'blur' }
+            { min: 1, max: 12, message: '长度在 1 到 12 个字符', trigger: 'blur' }
           ],
           mainImg: [
             { required: true, message: '请上传主图', trigger: 'change' }
@@ -102,13 +91,10 @@
           categoryId: [
             { required: true, message: '请选择商品类别', trigger: 'change' }
           ],
-          secondImg: [
+          fileList: [
             { type: 'array', required: true, message: '请至少上传一张', trigger: 'change' }
           ],
           isShowOnIndex: [
-            { required: true, message: '请选择', trigger: 'change' }
-          ],
-          unit: [
             { required: true, message: '请选择', trigger: 'change' }
           ],
           prodType: [
@@ -133,22 +119,19 @@
                     prodDesc: this.formItem['prodDesc'],
                     isShowOnIndex: this.formItem['isShowOnIndex'],
                     details: this.formItem['details'],
-                    mainImg: this.formItem['mainImg'] || '/static/images/potato.png',
+                    mainImg: this.formItem['mainImg'],
                     categoryId: this.formItem['categoryId'],
-                    unit: this.formItem['unit'],
                     prodType: this.formItem['prodType'],
                     secondImg: this.formItem['secondImg']
                 };
-                let arr = this.formItem['secondImg'] ? this.formItem['secondImg'].split() : ['/static/images/potato.png']
-                this.fileList = []
+                let arr = this.formItem['secondImg'] ? this.formItem['secondImg'].split(",") : []
+                this.productForm.fileList = []
                 for (let i = 0; i < arr.length; i++) {
-                    this.fileList.push({name: i, url: arr[i]})
+                    this.productForm.fileList.push({name: i, url: arr[i]})
                 }
-                console.log(this.fileList)
             } else {
                 this.btnTxt = '立即创建'
-                this.fileList = []
-                this.$refs['categoryForm'].resetFields();
+                this.$refs['productForm'].resetFields();
             }
         }
     },
@@ -165,16 +148,28 @@
             this.loading = false
         })
       },
+      getProductType () {
+        getProductType({
+          code: 'PROD_TYPE',
+        }).then((res)=>{
+          if (res.status === 200 && res.data.resultCode === '000001') {
+            this.productType = res.data.resultObject
+          }
+        }).catch((error)=>{
+        })
+      },
       addProduct () {
         if (this.loading) return false
         this.loading = true
-        addProduct({
-            pageIndex: this.pageIndex,
-            pageSize: this.pageSize
-        }).then((res)=>{
+        addProduct(this.productForm).then((res)=>{
             this.loading = false
             if (res.status === 200 && res.data.resultCode === '000001') {
-              this.categorysList = res.data.resultObject.list
+              this.loading = false
+              this.$message({
+                message: "创建成功",
+                type: "success"
+              });
+              this.resetForm('productForm')
             }
         }).catch((error)=>{
             this.loading = false
@@ -185,8 +180,8 @@
         this.loading = true
         let obj = Object.assign({}, this.productForm)
         obj.secondImg = []
-        for (let i = 0; i < this.fileList.length; i++) {
-            obj.secondImg.push(this.fileList[i].url)
+        for (let i = 0; i < this.productForm.fileList.length; i++) {
+            obj.secondImg.push(this.productForm.fileList[i].url)
         }
         obj.secondImg = obj.secondImg.join()
         updateProduct(obj).then((res)=>{
@@ -201,14 +196,13 @@
         })
       },
       submitForm(formName) {
-        console.log(this.productForm)
         this.$refs[formName].validate((valid) => {
           if (valid) {
-            // if (this.productForm.id) {
-            //   this.updateProduct()
-            // } else {
-            //   this.addProduct()
-            // }
+            if (this.productForm.id) {
+              this.updateProduct()
+            } else {
+              this.addProduct()
+            }
           } else {
             console.log('error submit!!');
             return false;
@@ -217,39 +211,49 @@
       },
       resetForm(formName) {
         this.productForm = {
+          categoryId: '',
           prodDesc: '', // 商品描述
           prodName: '', // 商品名称
           details: '',
           prodType: '',
           isShowOnIndex: '',
-          unit: '',
           mainImg: '',
-          secondImg: []
+          secondImg: '',
+          fileList: []
         },
+        console.log('resetForm', this.$refs[formName])
         this.$refs[formName].resetFields();
         this.$emit('cancel')
       },
       handleAvatarSuccess(res, file) {
-        console.log(res, file)
-        this.productForm.mainImg = URL.createObjectURL(file.raw);
+        this.productForm.mainImg = res;
       },
       beforeAvatarUpload(file) {
+        console.log(file)
+        if (file.type !== 'image/png' && file.type !== 'image/jpg' && file.type !== 'image/jpeg') {
+          this.$message.error('只能上传图片文件');
+        }
         const isLt2M = file.size / 1024 / 1024 < 2;
         if (!isLt2M) {
-          this.$message.error('上传头像图片大小不能超过 2MB!');
+          this.$message.error('上传图片大小不能超过 2MB!');
         }
         return isLt2M;
       },
-      handleRemove(file, fileList) {
-        console.log(file, fileList);
-      },
-      handlePictureCardPreview(file) {
-        this.dialogImageUrl = file.url;
-        this.dialogVisible = true;
+      handlePictureCardSuccess(res, file) {
+        this.productForm.fileList.push({
+          name: file.name,
+          url: res
+        })
+        this.productForm.secondImg = []
+        for (let i = 0; i < this.productForm.fileList.length; i++) {
+          this.productForm.secondImg.push(this.productForm.fileList[i].url)
+        }
+        this.productForm.secondImg = this.productForm.secondImg.join()
       }
     },
     created () {
       this.getListCategorys()
+      this.getProductType()
     }
   }
 </script>

@@ -1,90 +1,78 @@
 <template>
-  <div class="coupon tableData">
-    <div class="couponList" v-show="!isForm">
+  <div class="carousels tableData">
+    <div class="carouselsList" v-show="!isForm">
       <el-row class="top-box">
-        <el-button type="success" icon="el-icon-plus" @click="addBtnClick">新增优惠券</el-button>
+        <el-button type="success" icon="el-icon-plus" @click="addBtnClick">新增轮播图</el-button>
       </el-row>
-       <el-table border :data="couponList">
+       <el-table border :data="carouselsList">
         <el-table-column
-          label="名称"
-          prop="name">
-        </el-table-column>
-        <el-table-column
-          label="使用规则">
+          label="图片">
           <template slot-scope="scope">
-            <pre>{{ scope.row.ruleDesc }}</pre>
+            <img :src="scope.row.image" alt="" srcset="">
           </template>
         </el-table-column>
         <el-table-column
-          label="生效时间"
-          prop="effTime">
+          label="跳转路径"
+          prop="url">
         </el-table-column>
         <el-table-column
-          label="失效时间"
-          prop="expTime">
-        </el-table-column>
-        <el-table-column
-          label="优惠券类型">
+          label="轮播类型">
           <template slot-scope="scope">
-            <span>{{scope.row.type == '1' ? '价格限制' : scope.row.type == '2' ? '产品限制' : '商品类别限制'}}</span>
+            <span>{{scope.row.type == 'P' ? '商品' : '公告'}}</span>
           </template>
         </el-table-column>
         <el-table-column
-          label="最低限制金额"
-          prop="limitPrice">
+          label="序号"
+          prop="sort">
         </el-table-column>
         <el-table-column
-          label="限制商品名称"
-          prop="limitProductName">
+          label="状态">
+          <template slot-scope="scope">
+            <span>{{scope.row.status == '1' ? '生效' : '失效'}}</span>
+          </template>
         </el-table-column>
         <el-table-column
          label="操作">
           <template slot-scope="scope">
             <el-button
               size="mini"
+              @click="showForm(scope.$index)">编辑</el-button>
+            <!-- <el-button
+              size="mini"
               type="danger"
-              @click="delList(scope.$index, scope.row.id)">删除</el-button>
+              @click="delList(scope.$index, scope.row.id)">删除</el-button> -->
           </template>
         </el-table-column>
       </el-table>
-      <el-pagination
-        class="formPagination"
-        background
-        layout="prev, pager, next"
-        :total="total"
-        @current-change="currentChange"
-      ></el-pagination>
     </div>
-    <couponForm v-show="isForm" :formItem="formItem" v-on:cancel="closeForm"></couponForm>
+    <carouselForm v-show="isForm" :formItem="formItem" v-on:cancel="closeForm"></carouselForm>
   </div>
 </template>
 
 <script>
-import { getCouponList, deleteCategory } from '@/request/api'
-import couponForm from './components/couponForm.vue'
+import { getListCarousels, deleteCategory } from '@/request/api'
+import carouselForm from './components/form.vue'
 export default {
-  name: "coupon",
+  name: "carousels",
   data() {
     return {
-      total: 0,
-      pageIndex: 1,
-      pageSize: 10,
+      status: '',
       isForm: false,
       formItem: {},
       loading: false,
-      couponList: []
+      carouselsList: []
     };
   },
   components:{
-    couponForm
+    carouselForm
   },
   methods: {
-    currentChange(index) {
-      this.pageIndex = index
-      this.getCouponList()
+    showForm(index) {
+      this.formItem = this.carouselsList[index]
+      this.isForm = true
     },
     closeForm() {
-      this.getCouponList()
+      this.getListCarousels()
       this.isForm = false
     },
     delList(index, id) {
@@ -96,16 +84,15 @@ export default {
         this.deleteCategory(index, id)
       });
     },
-    getCouponList() {
+    getListCarousels() {
       if (this.loading) return false
       this.loading = true
-      getCouponList({
-        pageIndex: this.pageIndex,
-        pageSize: this.pageSize
+      getListCarousels({
+        status: this.status
       }).then((res)=>{
         this.loading = false
         if (res.status === 200 && res.data.resultCode === '000001') {
-          this.couponList = res.data.resultObject.list
+          this.carouselsList = res.data.resultObject
         }
       }).catch((error)=>{
         this.loading = false
@@ -127,7 +114,7 @@ export default {
             message: "删除成功",
             type: "success"
           });
-          this.couponList.splice(index, 1)
+          this.carouselsList.splice(index, 1)
           this.total -= 1
         }
       }).catch((error)=>{
@@ -136,20 +123,19 @@ export default {
     }
   },
   mounted () {
-    this.getCouponList()
+    this.getListCarousels()
   }
 };
 </script>
 
 <style lang="scss">
-.coupon {
+.carousels {
   .top-box{
     margin-bottom: 10px;
   }
-  .formPagination {
-    display: flex;
-    justify-content: flex-end;
-    margin-top: 15px;
+  img{
+    width: 40px;
+    height: 40px;
   }
 }
 </style>

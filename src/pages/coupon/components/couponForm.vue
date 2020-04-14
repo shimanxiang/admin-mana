@@ -8,7 +8,7 @@
             <el-input v-model="couponForm.denomination" onkeyup="this.value= this.value.match(/\d+(\.\d{0,2})?/) ? this.value.match(/\d+(\.\d{0,2})?/)[0] : ''"></el-input>
         </el-form-item>
         <el-form-item label="有效期" prop="date">
-            <el-date-picker v-model="couponForm.date" @change="dateChange" format="yyyy-MM-dd HH:mm" value-format="yyyy-MM-dd HH:mm" type="datetimerange" :picker-options="pickerOptions" start-placeholder="生效时间" end-placeholder="失效时间"></el-date-picker>
+            <el-date-picker v-model="couponForm.date" @change="dateChange" format="yyyy-MM-dd" value-format="yyyy-MM-dd" type="daterange" :picker-options="pickerOptions" start-placeholder="生效时间" end-placeholder="失效时间"></el-date-picker>
         </el-form-item>
         <el-form-item label="使用规则">
             <el-input type="textarea" v-model="couponForm.ruleDesc"></el-input>

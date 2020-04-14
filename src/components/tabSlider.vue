@@ -39,7 +39,6 @@ export default {
   },
   computed: {
     menu() {
-      console.log(this.$menus)
       return this.$menus;
     }
   },

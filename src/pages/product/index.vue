@@ -15,17 +15,14 @@
         <el-table-column type="expand">
           <template slot-scope="props">
             <el-form label-position="left" inline class="demo-table-expand">
-              <el-form-item label="单位">
-                <span>{{ props.row.unit }}</span>
+              <el-form-item label="商品副图片：">
+                <img :src="item" alt="" srcset="" v-for="(item, index) in props.row.secondImg" :key="index">
               </el-form-item>
-              <el-form-item label="商品副图片">
-                <span>{{ props.row.secondImg }}</span>
-              </el-form-item>
-              <el-form-item label="是否在首页显示">
+              <el-form-item label="是否在首页显示：">
                 <span>{{ props.row.isShowOnIndex === '1' ? '是' : '否'}}</span>
               </el-form-item>
-              <el-form-item label="商品类型">
-                <span>{{ props.row.prodType }}</span>
+              <el-form-item label="商品类型：">
+                <span>{{ props.row.prodTypeDesc }}</span>
               </el-form-item>
             </el-form>
           </template>
@@ -103,7 +100,7 @@ export default {
       loading: false,
       total: 0,
       prodName: '',
-      pageSize: 15,
+      pageSize: 10,
       pageIndex: 1,
       productList: []
     };
@@ -175,6 +172,12 @@ export default {
       }).then((res)=>{
         this.loading = false
         if (res.status === 200 && res.data.resultCode === '000001') {
+          for (let i = 0; i < res.data.resultObject.list.length; i++) {
+            const element = res.data.resultObject.list[i];
+            if (element.secondImg) {
+              element.secondImg = element.secondImg.split(",")
+            }
+          }
           this.productList = res.data.resultObject.list
           this.total = res.data.resultObject.total
         }

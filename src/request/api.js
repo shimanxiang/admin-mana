@@ -21,7 +21,7 @@ export const updateProduct = (param) =>{
 
 // 下架商品
 export const deleteProduct = (param) =>{
-    return post(`api/product/lowerShelf`, param); 
+    return get(`api/product/lowerShelf`, param); 
 }
 
 // 查询类别列表
@@ -54,6 +54,17 @@ export const addSpecInventory = (param) =>{
     return post(`api/spec/addSpecInventory`, param); 
 }
 
+// 删除规格
+export const deleteSpec = (param) =>{
+    return post(`api/spec/deleteSpec`, param, {'content-type': 'application/x-www-form-urlencoded'}); 
+}
+
+// 更新规格
+export const updateSpec = (param) =>{
+    return post(`api/spec/updateSpec`, param); 
+}
+
+
 // 订单列表
 export const getOrderList = (param) =>{
     return get(`api/orderInfo/listOrderListVO`, param); 
@@ -62,6 +73,11 @@ export const getOrderList = (param) =>{
 // 用户列表
 export const getUserList = (param) =>{
     return get(`api/user/listUser`, param); 
+}
+
+// 用户优惠券列表
+export const getListUserCouponByUserId = (param) =>{
+    return get(`api/user/listUserCouponByUserId`, param); 
 }
 
 // 查询优惠券模板列表
@@ -77,4 +93,39 @@ export const addCouponTemplate = (param) =>{
 // 删除优惠券模板
 export const deleteCouponTemplate = (param) =>{
     return post(`api/couponTemplate`, param); 
+}
+
+// 分配优惠券
+export const distributionCoupon = (param) =>{
+    return post(`api/coupon`, param, {'content-type': 'application/x-www-form-urlencoded'}); 
+}
+
+// 查询商品类型
+export const getProductType = (param) =>{
+    return get(`api/dictionary/code`, param); 
+}
+
+// 查询订单详情
+export const getOrderDetailInfo = (param) =>{
+    return get(`api/orderInfo/orderDetailInfo`, param); 
+}
+
+// 查询全部轮播图
+export const getListCarousels = (param) =>{
+    return get(`api/carousel/listCarousels`, param); 
+}
+
+// 增加轮播图
+export const addCarousel = (param) =>{
+    return post(`api/carousel/addCarousel`, param); 
+}
+
+// 更新轮播图
+export const updateCarousel = (param) =>{
+    return post(`api/carousel/updateCarousel`, param); 
+}
+
+// 登录
+export const login = (param) =>{
+    return post(`api/admin/adminLogin`, param); 
 }
