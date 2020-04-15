@@ -75,10 +75,10 @@ export default {
 }
 .tabRouter {
   position: absolute;
-  width: 90%;
+  width: 96%;
   top: 60px;
   left: 50%;
-  margin-left: -45%;
+  margin-left: -48%;
   margin-bottom: 100px;
 }
 </style>

@@ -31,10 +31,16 @@
             <span>{{ scope.row.status == "1" ? "生效" : "失效" }}</span>
           </template>
         </el-table-column>
-        <el-table-column label="操作">
+        <el-table-column label="操作" width="240px">
           <template slot-scope="scope">
             <el-button size="mini" @click="showForm(scope.$index)"
               >编辑</el-button
+            >
+            <el-button
+              size="mini"
+              type="primary"
+              @click="gotoProduct(scope.row.id)"
+              >查看商品</el-button
             >
             <el-button
               size="mini"
@@ -89,6 +95,12 @@ export default {
     },
     delList(index, id, status) {
       this.updateCategoryStatus(index, id, status);
+    },
+    gotoProduct(id) {
+      this.$router.push({
+        path: "/product",
+        query: { id: id }
+      });
     },
     getListCategorys() {
       if (this.loading) return false;

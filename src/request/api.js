@@ -113,6 +113,11 @@ export const addCarousel = param => {
   return post(`api/carousel/addCarousel`, param);
 };
 
+// 删除轮播图
+export const deleteCarousel = param => {
+  return get(`api/carousel/deleteCarousel`, param);
+};
+
 // 更新轮播图
 export const updateCarousel = param => {
   return post(`api/carousel/updateCarousel`, param);

@@ -24,7 +24,7 @@
             <span>{{ scope.row.status == "1" ? "生效" : "失效" }}</span>
           </template>
         </el-table-column>
-        <el-table-column label="操作">
+        <el-table-column label="操作" width="220px">
           <template slot-scope="scope">
             <el-button size="mini" @click="showForm(scope.$index)"
               >编辑</el-button
@@ -38,10 +38,16 @@
             >
             <el-button
               size="mini"
-              type="danger"
+              type="primary"
               v-show="scope.row.status == '0'"
               @click="updateStatus(scope.$index, scope.row.id, '1')"
               >生效</el-button
+            >
+            <el-button
+              size="mini"
+              type="danger"
+              @click="clickDelBtn(scope.$index, scope.row.id)"
+              >删除</el-button
             >
           </template>
         </el-table-column>
@@ -56,7 +62,11 @@
 </template>
 
 <script>
-import { getListCarousels, updateCarouselStatus } from "@/request/api";
+import {
+  getListCarousels,
+  updateCarouselStatus,
+  deleteCarousel
+} from "@/request/api";
 import carouselForm from "./components/form.vue";
 export default {
   name: "carousels",
@@ -92,6 +102,35 @@ export default {
           this.loading = false;
           if (res.status === 200 && res.data.resultCode === "000001") {
             this.carouselsList[index].status = status;
+          }
+        })
+        .catch(() => {
+          this.loading = false;
+        });
+    },
+    clickDelBtn(index, id) {
+      this.$confirm("确定删除该轮播图？", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning"
+      }).then(() => {
+        this.deleteCarousel(index, id);
+      });
+    },
+    deleteCarousel(index, id) {
+      if (this.loading) return false;
+      this.loading = true;
+      deleteCarousel({
+        id: id
+      })
+        .then(res => {
+          this.loading = false;
+          if (res.status === 200 && res.data.resultCode === "000001") {
+            this.$message({
+              message: "删除成功",
+              type: "success"
+            });
+            this.carouselsList.splice(index, 1);
           }
         })
         .catch(() => {

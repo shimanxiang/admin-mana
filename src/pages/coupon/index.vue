@@ -8,7 +8,8 @@
       </el-row>
       <el-table border :data="couponList">
         <el-table-column label="名称" prop="name"> </el-table-column>
-        <el-table-column label="优惠额度" prop="denomination"> </el-table-column>
+        <el-table-column label="优惠额度" prop="denomination">
+        </el-table-column>
         <el-table-column label="使用规则">
           <template slot-scope="scope">
             <pre>{{ scope.row.ruleDesc }}</pre>

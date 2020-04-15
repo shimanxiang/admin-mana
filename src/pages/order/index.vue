@@ -154,7 +154,6 @@ export default {
     }
   },
   mounted() {
-    console.log(this.$route);
     if (this.$route.query.name) {
       this.searchValue = decodeURIComponent(this.$route.query.name);
     }

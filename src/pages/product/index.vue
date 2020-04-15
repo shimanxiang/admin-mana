@@ -199,13 +199,13 @@ export default {
           console.log(error);
         });
     },
-    getListProducts() {
+    getListProducts(id) {
       if (this.loading) return false;
       this.loading = true;
       getListProducts({
         pageIndex: this.pageIndex,
         pageSize: this.pageSize,
-        prodName: this.prodName
+        prodName: this.prodName || id
       })
         .then(res => {
           this.loading = false;
@@ -234,7 +234,11 @@ export default {
     }
   },
   mounted() {
-    this.getListProducts();
+    if (this.$route.query.id) {
+      this.getListProducts(this.$route.query.id);
+    } else {
+      this.getListProducts();
+    }
   }
 };
 </script>
