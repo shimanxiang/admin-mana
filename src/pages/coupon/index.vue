@@ -60,7 +60,7 @@
 </template>
 
 <script>
-import { getCouponList, deleteCategory } from '@/request/api'
+import { getCouponList, deleteCouponTemplate } from '@/request/api'
 import couponForm from './components/couponForm.vue'
 export default {
   name: "coupon",
@@ -93,7 +93,7 @@ export default {
         cancelButtonText: "取消",
         type: "warning"
       }).then(() => {
-        this.deleteCategory(index, id)
+        this.deleteCouponTemplate(index, id)
       });
     },
     getCouponList() {
@@ -115,11 +115,11 @@ export default {
       this.formItem = {}
       this.isForm = true
     },
-    deleteCategory (index, id) {
+    deleteCouponTemplate (index, id) {
       if (this.loading) return false
       this.loading = true
-      deleteCategory({
-        id: id
+      deleteCouponTemplate({
+        couponTemplateId: id
       }).then((res)=>{
         this.loading = false
         if (res.status === 200 && res.data.resultCode === '000001') {

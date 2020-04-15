@@ -55,12 +55,18 @@
           prop="createTime">
         </el-table-column>
         <el-table-column
-          label="操作">
+          label="操作"
+          width="150px">
           <template slot-scope="scope">
             <el-button
               size="mini"
               type="primary"
               @click="showDetail(scope.row.orderInfoId)">详情</el-button>
+            <el-button
+              size="mini"
+              type="success"
+              v-if="scope.row.status == '2'"
+              @click="clickDeliver(scope.row.orderInfoId, scope.$index)">发货</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -77,7 +83,7 @@
 </template>
 
 <script>
-import { getOrderList } from '@/request/api'
+import { getOrderList, deliver } from '@/request/api'
 import detail from './components/detail.vue'
 export default {
   name: "orderlist",
@@ -115,6 +121,25 @@ export default {
     },
     closeForm() {
       this.isDetail = false
+    },
+    clickDeliver (orderId, index) {
+      
+      if (this.loading) return false
+      this.loading = true
+      deliver({
+        orderId: orderId
+      }).then((res)=>{
+        this.loading = false
+        if (res.status === 200 && res.data.resultCode === '000001') {
+          this.orderList[index].status = '3'
+          this.$message({
+            message: "发货操作成功",
+            type: "success"
+          });
+        }
+      }).catch((error)=>{
+        this.loading = false
+      })
     },
     getOrderList() {
       if (this.loading) return false

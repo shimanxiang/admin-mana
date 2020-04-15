@@ -19,10 +19,6 @@ export const updateProduct = (param) =>{
     return post(`api/product/updateProduct`, param); 
 }
 
-// 下架商品
-export const deleteProduct = (param) =>{
-    return get(`api/product/lowerShelf`, param); 
-}
 
 // 查询类别列表
 export const getListCategorys = () =>{
@@ -39,10 +35,6 @@ export const updateCategory = (param) =>{
     return post(`api/category/updateCategory`, param); 
 }
 
-// 类别删除
-export const deleteCategory = (param) =>{
-    return post(`api/category/delete`, param, {'content-type': 'application/x-www-form-urlencoded'}); 
-}
 
 // 查询规格列表
 export const getListSpecsByProdId = (param) =>{
@@ -125,7 +117,37 @@ export const updateCarousel = (param) =>{
     return post(`api/carousel/updateCarousel`, param); 
 }
 
+// 修改轮播状态 失效 生效
+export const updateCarouselStatus = (param) =>{
+    return post(`api/carousel/lowerShelf`, param); 
+}
+
 // 登录
 export const login = (param) =>{
     return post(`api/admin/adminLogin`, param); 
+}
+
+// 发货
+export const deliver = (param) =>{
+    return post(`api/orderInfo/deliver`, param, {'content-type': 'application/x-www-form-urlencoded'}); 
+}
+
+// 查询商品含有状态 PROD_STATUS
+export const getProductStatus = (param) =>{
+    return get(`api/dictionary/code`, param); 
+}
+
+// 下架商品
+export const lowerShelfProduct = (param) =>{
+    return get(`api/product/lowerShelf`, param); 
+}
+
+// 上架商品
+export const upperShelfProduct = (param) =>{
+    return get(`api/product/upperShelf`, param); 
+}
+
+// 类别生失效 0 失效 1 生效
+export const updateCategoryStatus = (param) =>{
+    return post(`api/category/updateCategoryStatus`, param, {'content-type': 'application/x-www-form-urlencoded'}); 
 }

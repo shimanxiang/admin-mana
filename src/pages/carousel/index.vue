@@ -37,10 +37,16 @@
             <el-button
               size="mini"
               @click="showForm(scope.$index)">编辑</el-button>
-            <!-- <el-button
+            <el-button
               size="mini"
               type="danger"
-              @click="delList(scope.$index, scope.row.id)">删除</el-button> -->
+              v-show="scope.row.status == '1'"
+              @click="updateStatus(scope.$index, scope.row.id, '0')">失效</el-button>
+            <el-button
+              size="mini"
+              type="danger"
+              v-show="scope.row.status == '0'"
+              @click="updateStatus(scope.$index, scope.row.id, '1')">生效</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -50,7 +56,7 @@
 </template>
 
 <script>
-import { getListCarousels, deleteCategory } from '@/request/api'
+import { getListCarousels, updateCarouselStatus } from '@/request/api'
 import carouselForm from './components/form.vue'
 export default {
   name: "carousels",
@@ -75,14 +81,20 @@ export default {
       this.getListCarousels()
       this.isForm = false
     },
-    delList(index, id) {
-      this.$confirm("此操作将永久删除，是否继续？", "提示", {
-        confirmButtonText: "确定",
-        cancelButtonText: "取消",
-        type: "warning"
-      }).then(() => {
-        this.deleteCategory(index, id)
-      });
+    updateStatus (index, id, status) {
+      if (this.loading) return false
+      this.loading = true
+      updateCarouselStatus({
+        id: id,
+        status: status
+      }).then((res)=>{
+        this.loading = false
+        if (res.status === 200 && res.data.resultCode === '000001') {
+          this.carouselsList[index].status = status
+        }
+      }).catch((error)=>{
+        this.loading = false
+      })
     },
     getListCarousels() {
       if (this.loading) return false
@@ -101,25 +113,6 @@ export default {
     addBtnClick () {
       this.formItem = {}
       this.isForm = true
-    },
-    deleteCategory (index, id) {
-      if (this.loading) return false
-      this.loading = true
-      deleteCategory({
-        id: id
-      }).then((res)=>{
-        this.loading = false
-        if (res.status === 200 && res.data.resultCode === '000001') {
-          this.$message({
-            message: "删除成功",
-            type: "success"
-          });
-          this.carouselsList.splice(index, 1)
-          this.total -= 1
-        }
-      }).catch((error)=>{
-        this.loading = false
-      })
     }
   },
   mounted () {

@@ -69,7 +69,13 @@
             <el-button
               size="mini"
               type="danger"
+              v-show="scope.row.status == '1'"
               @click="delList(scope.$index, scope.row.id)">下架</el-button>
+            <el-button
+              size="mini"
+              type="danger"
+              v-show="scope.row.status == '0'"
+              @click="upperShelfProduct(scope.$index, scope.row.id)">上架</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -87,7 +93,7 @@
 </template>
 
 <script>
-import { getListProducts, deleteProduct } from '@/request/api'
+import { getListProducts, lowerShelfProduct, upperShelfProduct } from '@/request/api'
 import formList from './components/form.vue'
 import specComp from './components/spec.vue'
 export default {
@@ -125,23 +131,16 @@ export default {
       this.compStatus = 0
     },
     showSpec (id) {
-      console.log(id)
       this.compStatus = 2
       this.prodId = id
     },
     delList(index, id) {
-      this.$confirm("此操作将下架商品，是否继续？", "提示", {
-        confirmButtonText: "确定",
-        cancelButtonText: "取消",
-        type: "warning"
-      }).then(() => {
-        this.deleteProduct(index, id)
-      });
+      this.lowerShelfProduct(index, id)
     },
-    deleteProduct (index, id) {
+    lowerShelfProduct (index, id) {
       if (this.loading) return false
       this.loading = true
-      deleteProduct({
+      lowerShelfProduct({
         prodId: id
       }).then((res)=>{
         this.loading = false
@@ -150,11 +149,33 @@ export default {
             message: "下架成功",
             type: "success"
           });
-          this.productList.splice(index, 1)
-          this.total -= 1
+          this.productList[index].status = '0'
         } else {
           this.$message({
             message: "下架失败",
+            type: "error"
+          });
+        }
+      }).catch((error)=>{
+        this.loading = false
+      })
+    },
+    upperShelfProduct (index, id) {
+      if (this.loading) return false
+      this.loading = true
+      upperShelfProduct({
+        prodId: id
+      }).then((res)=>{
+        this.loading = false
+        if (res.status === 200 && res.data.resultCode === '000001') {
+          this.$message({
+            message: "上架成功",
+            type: "success"
+          });
+          this.productList[index].status = '1'
+        } else {
+          this.$message({
+            message: "上架失败",
             type: "error"
           });
         }

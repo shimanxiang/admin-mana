@@ -40,7 +40,13 @@
             <el-button
               size="mini"
               type="danger"
-              @click="delList(scope.$index, scope.row.id)">删除</el-button>
+              v-show="scope.row.status == '1'"
+              @click="delList(scope.$index, scope.row.id, '0')">失效</el-button>
+            <el-button
+              size="mini"
+              type="danger"
+              v-show="scope.row.status == '0'"
+              @click="delList(scope.$index, scope.row.id, '1')">生效</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -50,7 +56,7 @@
 </template>
 
 <script>
-import { getListCategorys, deleteCategory } from '@/request/api'
+import { getListCategorys, updateCategoryStatus } from '@/request/api'
 import formList from './components/form.vue'
 export default {
   name: "categorys",
@@ -74,14 +80,8 @@ export default {
       this.getListCategorys()
       this.isForm = false
     },
-    delList(index, id) {
-      this.$confirm("此操作将永久删除，是否继续？", "提示", {
-        confirmButtonText: "确定",
-        cancelButtonText: "取消",
-        type: "warning"
-      }).then(() => {
-        this.deleteCategory(index, id)
-      });
+    delList(index, id, status) {
+      this.updateCategoryStatus(index, id, status)
     },
     getListCategorys() {
       if (this.loading) return false
@@ -99,20 +99,20 @@ export default {
       this.formItem = {}
       this.isForm = true
     },
-    deleteCategory (index, id) {
+    updateCategoryStatus (index, id, status) {
       if (this.loading) return false
       this.loading = true
-      deleteCategory({
-        id: id
+      updateCategoryStatus({
+        id: id,
+        status: status
       }).then((res)=>{
         this.loading = false
         if (res.status === 200 && res.data.resultCode === '000001') {
           this.$message({
-            message: "删除成功",
+            message: "操作成功",
             type: "success"
           });
-          this.categorysList.splice(index, 1)
-          this.total -= 1
+          this.categorysList[index].status = status
         }
       }).catch((error)=>{
         this.loading = false

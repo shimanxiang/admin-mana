@@ -23,7 +23,12 @@
         </el-form-item>
         <el-form-item label="商品类型" prop="prodType">
           <el-select v-model="productForm.prodType" placeholder="请选择">
-            <el-option :label="item.name" :value="item.id" v-for="item in productType" :key="item.id"></el-option>
+            <el-option :label="item.name" :value="item.value" v-for="item in productType" :key="item.code + item.id"></el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="商品状态" prop="status" v-show="!formItem['id']">
+          <el-select v-model="productForm.status" placeholder="请选择">
+            <el-option :label="item.name" :value="item.value" v-for="item in productStatus" :key="item.code + item.id"></el-option>
           </el-select>
         </el-form-item>
         <el-form-item label="商品主图" prop="mainImg">
@@ -58,19 +63,21 @@
   </div>
 </template>  
 <script>
-  import { getListCategorys, addProduct, updateProduct, getProductType } from '@/request/api'
+  import { getListCategorys, addProduct, updateProduct, getProductType, getProductStatus } from '@/request/api'
   export default {
     data() {
       return {
         categorysList: [], // 商品类别
         btnTxt: '立即创建',
         productType: [],
+        productStatus: [],
         productForm: {
           categoryId: '',
           prodDesc: '', // 商品描述
           prodName: '', // 商品名称
           details: '',
           prodType: '',
+          status: '',
           isShowOnIndex: '',
           mainImg: '',
           secondImg: '',
@@ -100,6 +107,9 @@
           prodType: [
             { required: true, message: '请选择', trigger: 'change' }
           ],
+          status: [
+            { required: true, message: '请选择', trigger: 'change' }
+          ],
           details: [
             { required: true, message: '请填写商品详情', trigger: 'blur' }
           ]
@@ -122,9 +132,10 @@
                     mainImg: this.formItem['mainImg'],
                     categoryId: this.formItem['categoryId'],
                     prodType: this.formItem['prodType'],
+                    status: this.formItem['status'],
                     secondImg: this.formItem['secondImg']
                 };
-                let arr = this.formItem['secondImg'] ? this.formItem['secondImg'].split(",") : []
+                let arr = this.formItem['secondImg']
                 this.productForm.fileList = []
                 for (let i = 0; i < arr.length; i++) {
                     this.productForm.fileList.push({name: i, url: arr[i]})
@@ -154,6 +165,16 @@
         }).then((res)=>{
           if (res.status === 200 && res.data.resultCode === '000001') {
             this.productType = res.data.resultObject
+          }
+        }).catch((error)=>{
+        })
+      },
+      getProductStatus () {
+        getProductStatus({
+          code: 'PROD_STATUS',
+        }).then((res)=>{
+          if (res.status === 200 && res.data.resultCode === '000001') {
+            this.productStatus = res.data.resultObject
           }
         }).catch((error)=>{
         })
@@ -216,6 +237,7 @@
           prodName: '', // 商品名称
           details: '',
           prodType: '',
+          status: '',
           isShowOnIndex: '',
           mainImg: '',
           secondImg: '',
@@ -254,6 +276,7 @@
     created () {
       this.getListCategorys()
       this.getProductType()
+      this.getProductStatus()
     }
   }
 </script>
