@@ -1,21 +1,21 @@
 <template>
   <div class="tabCard">
-    <el-scrollbar :vertical="false" class="scroll-container">
+    <div class="scroll-container">
       <router-link
         v-for="item in editableTabs"
         v-bind:key="item.name"
         :to="item.path"
-        :class="isActive(item)?'active':''"
+        :class="isActive(item) ? 'active' : ''"
         class="tags-view-item"
       >
-        {{item.name}}
+        {{ item.name }}
         <span
           v-if="!isAffix(item)"
           class="el-icon-close"
           @click.prevent.stop="closeSelectedTag(item)"
         />
       </router-link>
-    </el-scrollbar>
+    </div>
   </div>
 </template>
 
@@ -35,7 +35,7 @@ export default {
       return event.meta;
     },
     closeSelectedTag(event) {
-      this.$store.dispatch("delTabs", event).then(res => {
+      this.$store.dispatch("delTabs", event).then(() => {
         if (!this.$store.state.TabModule.editableTabs.length) {
           this.$router.push("/");
           return;
@@ -52,25 +52,20 @@ export default {
 };
 </script>
 
-<style lang="scss">
+<style lang="less">
 .tabCard {
   position: fixed;
   width: 100%;
   background: #fff;
   z-index: 1;
+  height: 50px;
+  line-height: 50px;
   .scroll-container {
     white-space: nowrap;
     position: relative;
     overflow: hidden;
     width: 100%;
     border-bottom: 1px solid #ccc;
-    .el-scrollbar__bar {
-      bottom: 0px;
-    }
-    .el-scrollbar__wrap {
-      height: 50px;
-      line-height: 50px;
-    }
     .tags-view-item {
       text-align: center;
       height: 30px;

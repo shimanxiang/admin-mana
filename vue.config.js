@@ -21,20 +21,10 @@ module.exports = {
             }
         },
     },
-    configureWebpack: {
-        resolve: {
-            alias: {
-                'assets': '@/assets',
-                'components': '@/components',
-                'views': '@/views',
-            }
-        }
-    },
     chainWebpack: config => {
         config.plugin("define").tap(args => {
             args[0]["process.env"].BASE_URL = JSON.stringify(process.env.BASE_URL);
             return args;
         });
-    },
-    transpileDependencies: ['resize-detector', 'element-ui']
+    }
 }

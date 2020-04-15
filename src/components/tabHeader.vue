@@ -18,7 +18,6 @@
         <el-col :span="4" :xl="3" :md="5" :sm="5" :xs="0">
           <div class="tabHeader_tool">
             <div class="label_icon el-icon-rank" v-on:click="zoom"></div>
-            <!-- <img class="label_img" src="../assets/images/person.jpg" alt="作者" /> -->
           </div>
         </el-col>
         <el-col :span="2" :xl="2" :md="2" :sm="3" :xs="6">
@@ -73,7 +72,7 @@ export default {
   }
 };
 </script>
-<style lang="scss">
+<style lang="less">
 .tabHeader {
   width: 100%;
   height: 70px;

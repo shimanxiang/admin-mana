@@ -3,27 +3,46 @@
     <div class="container">
       <div class="container_header">欢迎登录 - 系统管理</div>
       <el-form :model="formData">
-        <el-form-item prop="account" :rules="[{ required: true, message: '账号不能为空'}]">
+        <el-form-item
+          prop="account"
+          :rules="[{ required: true, message: '账号不能为空' }]"
+        >
           <div class="container_input">
             <i class="el-icon-user-solid"></i>
-            <el-input type="account" v-model="formData.account" autocomplete="off"></el-input>
+            <el-input
+              type="account"
+              v-model="formData.account"
+              autocomplete="off"
+            ></el-input>
           </div>
         </el-form-item>
-        <el-form-item prop="password" :rules="[{ required: true, message: '密码不能为空'}]">
+        <el-form-item
+          prop="password"
+          :rules="[{ required: true, message: '密码不能为空' }]"
+        >
           <div class="container_input">
             <i class="el-icon-s-goods"></i>
-            <el-input type="password" v-model="formData.password" autocomplete="off"></el-input>
+            <el-input
+              type="password"
+              v-model="formData.password"
+              autocomplete="off"
+            ></el-input>
           </div>
         </el-form-item>
       </el-form>
-      <el-button class="container_button" type="primary" @click="confirm" :loading="isLoading">登录</el-button>
+      <el-button
+        class="container_button"
+        type="primary"
+        @click="confirm"
+        :loading="isLoading"
+        >登录</el-button
+      >
     </div>
   </div>
 </template>
 
 <script>
-import Vue from "vue";
-import { login } from '@/request/api'
+import { login } from "@/request/api";
 export default {
   name: "login",
   data() {
@@ -49,34 +68,34 @@ export default {
       }
       this.isLoading = true;
       login({
-          userName: this.formData.account,
-          password: this.$md5(this.formData.password)
-        })
+        userName: this.formData.account,
+        password: this.$md5(this.formData.password)
+      })
         .then(res => {
           this.isLoading = false;
-          if (res.status === 200 && res.data.resultCode === '000001') {
+          if (res.status === 200 && res.data.resultCode === "000001") {
             this.$store.commit("setPersonInfo", this.formData);
             this.$store.commit("setIsLogin", true);
-            localStorage.setItem('isLogin', 'true');
+            localStorage.setItem("isLogin", "true");
             this.$message.success("登录成功");
-            this.$router.push('/');
+            this.$router.push("/");
           } else {
             this.$message.error(res.data.resultObject);
           }
         })
         .catch(err => {
-          console.log(err)
+          console.log(err);
           this.isLoading = false;
-          localStorage.setItem('isLogin', 'true');
-          this.$router.push('/');
-          this.$message.error('登录失败');
+          localStorage.setItem("isLogin", "true");
+          this.$router.push("/");
+          this.$message.error("登录失败");
         });
     }
   }
 };
 </script>
 
-<style lang="scss">
+<style lang="less">
 .login {
   width: 100vw;
   height: 70vh;
@@ -140,4 +159,3 @@ export default {
   }
 }
 </style>
-

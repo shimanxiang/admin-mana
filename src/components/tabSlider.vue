@@ -9,22 +9,28 @@
       active-text-color="#29aff6"
       :collapse="isCollapse"
     >
-      <template v-for="(item,index) in menu">
+      <template v-for="(item, index) in menu">
         <el-submenu :key="index" v-if="item['children']" :index="item.path">
           <template slot="title">
             <i :class="item.icon"></i>
-            <span slot="title">{{item.name}}</span>
+            <span slot="title">{{ item.name }}</span>
           </template>
           <el-menu-item
             :index="val.path"
             v-for="val in item['children']"
             v-bind:key="val.name"
             @click="addMenu(val)"
-          >{{val.name}}</el-menu-item>
+            >{{ val.name }}</el-menu-item
+          >
         </el-submenu>
-        <el-menu-item :key="index" v-else :index="item.path" @click="addMenu(item)">
+        <el-menu-item
+          :key="index"
+          v-else
+          :index="item.path"
+          @click="addMenu(item)"
+        >
           <i :class="item.icon"></i>
-          <span slot="title">{{item.name}}</span>
+          <span slot="title">{{ item.name }}</span>
         </el-menu-item>
       </template>
     </el-menu>
@@ -44,13 +50,13 @@ export default {
   },
   methods: {
     addMenu(item) {
-      console.log(item)
+      console.log(item);
       this.$store.commit("setTabs", item);
     }
   }
 };
 </script>
-<style lang="scss">
+<style lang="less">
 .el-menu-vertical-demo {
   height: 100%;
 }

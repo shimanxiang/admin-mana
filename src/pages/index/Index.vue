@@ -46,7 +46,7 @@ export default {
 };
 </script>
 
-<style lang="scss">
+<style lang="less">
 .index {
   position: fixed;
   width: 100%;
@@ -82,4 +82,3 @@ export default {
   margin-bottom: 100px;
 }
 </style>
-

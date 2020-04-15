@@ -9,7 +9,7 @@ export default {
   name: "app"
 };
 </script>
-<style lang="scss">
+<style lang="less">
 html,
 body,
 div,
@@ -95,6 +95,7 @@ video {
   border: 0;
   font-size: 100%;
   font: inherit;
+  font-family: "Microsoft YaHei";
 }
 /* HTML5 display-role reset for older browsers */
 article,
@@ -132,53 +133,60 @@ table {
   border-collapse: collapse;
   border-spacing: 0;
 }
-
+.el-button--mini,
+.el-button--mini.is-round {
+  padding: 7px 15px !important;
+}
+.el-button--text {
+  padding-left: 0px !important;
+  padding-right: 0px !important;
+}
 ::-webkit-scrollbar {
   display: none;
 }
-.el-button{
+.el-button {
   padding: 11px 20px;
 }
-.el-upload--picture-card{
+.el-upload--picture-card {
   width: 100px !important;
   height: 100px !important;
   line-height: 98px !important;
 }
-.el-textarea__inner{
+.el-textarea__inner {
   font-family: inherit;
 }
-.el-upload-list--picture-card .el-upload-list__item{
+.el-upload-list--picture-card .el-upload-list__item {
   width: 100px !important;
   height: 100px !important;
 }
-.tableData{
-  .el-table{
+.tableData {
+  .el-table {
     color: #222;
   }
-  .el-table thead{
+  .el-table thead {
     color: #222 !important;
     font-weight: bold;
   }
-  .el-table th{
+  .el-table th {
     background-color: #ecf5ff !important;
   }
-  .el-table td, .el-table th {
+  .el-table td,
+  .el-table th {
     padding: 8px 0;
   }
-  .el-table__expanded-cell[class*=cell]{
+  .el-table__expanded-cell[class*="cell"] {
     padding: 20px 50px;
   }
 }
-.categorys{
-  .el-table td, .el-table th {
+.categorys {
+  .el-table td,
+  .el-table th {
     padding: 15px 0;
   }
 }
-.edit-product{
-  .el-form-item__content{
+.edit-product {
+  .el-form-item__content {
     width: 100%;
   }
 }
 </style>
-
-
