@@ -1,3 +1,8 @@
+const CompressionWebpackPlugin = require('compression-webpack-plugin')
+const productionGzipExtensions = ['js', 'css']
+
+console.log(process.env.BASE_URL)
+
 module.exports = {
     // publicPath: process.env.NODE_ENV === 'production' ? './adminMana/' : './',
     /* 输出文件目录：在npm run build时，生成文件的目录名称 */
@@ -26,5 +31,16 @@ module.exports = {
             args[0]["process.env"].BASE_URL = JSON.stringify(process.env.BASE_URL);
             return args;
         });
+    },
+    configureWebpack:{
+        plugins: [            
+            // 下面是下载的插件的配置
+            new CompressionWebpackPlugin({
+                algorithm: 'gzip',
+                test: new RegExp('\\.(' + productionGzipExtensions.join('|') + ')$'),
+                threshold: 10240,
+                minRatio: 0.8
+            })
+        ]
     }
 }
