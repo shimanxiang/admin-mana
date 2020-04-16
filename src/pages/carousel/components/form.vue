@@ -10,7 +10,7 @@
       <el-form-item label="轮播图片" prop="image">
         <el-upload
           class="avatar-uploader"
-          action="/api/file/fileUpload"
+          :action="uploadPath"
           :data="{ type: 'C' }"
           :show-file-list="false"
           :on-success="handleAvatarSuccess"
@@ -56,6 +56,10 @@ import { addCarousel, updateCarousel } from "@/request/api";
 export default {
   data() {
     return {
+      uploadPath:
+        process.env.NODE_ENV === "production"
+          ? process.env.BASE_URL + "/file/fileUpload"
+          : "/api/file/fileUpload",
       loading: false,
       btnTxt: "立即创建",
       carouselForm: {

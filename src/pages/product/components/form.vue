@@ -55,7 +55,7 @@
       <el-form-item label="商品主图" prop="mainImg">
         <el-upload
           class="avatar-uploader"
-          action="/api/file/fileUpload"
+          :action="uploadPath"
           :data="{ type: 'P' }"
           :show-file-list="false"
           :on-success="handleAvatarSuccess"
@@ -71,7 +71,7 @@
       </el-form-item>
       <el-form-item label="商品副图" prop="fileList">
         <el-upload
-          action="/api/file/fileUpload"
+          :action="uploadPath"
           list-type="picture-card"
           :data="{ type: 'P' }"
           :limit="3"
@@ -102,6 +102,10 @@ import {
 export default {
   data() {
     return {
+      uploadPath:
+        process.env.NODE_ENV === "production"
+          ? process.env.BASE_URL + "/file/fileUpload"
+          : "/api/file/fileUpload",
       categorysList: [], // 商品类别
       btnTxt: "立即创建",
       productType: [],

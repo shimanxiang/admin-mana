@@ -67,7 +67,7 @@ let commonComponents = [
 
 const router = new Router({
   mode: "history",
-  base:'/dist/',
+  base: process.env.NODE_ENV === "production" ? "/dist/" : "/",
   routes: commonComponents
 });
 
