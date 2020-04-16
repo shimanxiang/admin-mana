@@ -4,8 +4,7 @@
 
 <script>
 export default {
-  mounted() {
-    console.log("test");
+  created() {
     this.$router.push("/");
   }
 };

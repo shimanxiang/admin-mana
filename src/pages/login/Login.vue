@@ -69,7 +69,7 @@ export default {
       this.isLoading = true;
       login({
         userName: this.formData.account,
-        password: this.$md5(this.formData.password)
+        password: this.formData.password
       })
         .then(res => {
           this.isLoading = false;

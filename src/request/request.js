@@ -24,6 +24,9 @@ service.interceptors.response.use(
     return res;
   },
   error => {
+    if (error.response && error.response.status == 401) {
+      router.push("/login");
+    }
     if (error.response && error.response.status == 404) {
       router.push("/404");
     }
