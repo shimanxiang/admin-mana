@@ -28,7 +28,6 @@
                 <i class="el-icon-arrow-down el-icon--right"></i>
               </span>
               <el-dropdown-menu slot="dropdown">
-                <el-dropdown-item command="a">关于作者</el-dropdown-item>
                 <el-dropdown-item command="b">退出登录</el-dropdown-item>
               </el-dropdown-menu>
             </el-dropdown>
@@ -40,6 +39,7 @@
 </template>
 
 <script>
+import { loginOut } from "@/request/api";
 export default {
   name: "tabHeader",
   data() {
@@ -54,10 +54,18 @@ export default {
       this.isCollapse = !this.isCollapse;
       this.$emit("collapse", this.isCollapse);
     },
-    handleCommand(event) {
-      event == "a"
-        ? this.$alert("我是高级前端兼CEO唐总")
-        : this.$router.replace("/login");
+    handleCommand() {
+      loginOut()
+        .then(res => {
+          if (res.status === 200 && res.data.resultCode === "000001") {
+            this.$router.replace("/login");
+            sessionStorage.removeItem("isLogin");
+            document.cookie = "JSESSIONID=''";
+          }
+        })
+        .catch(err => {
+          console.log(err);
+        });
     },
     zoom() {
       !this.isZoom ? this.openZoom() : this.closeZoom();

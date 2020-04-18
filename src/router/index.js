@@ -27,6 +27,10 @@ let commonComponents = [
   {
     path: "/",
     component: IndexLoadPage,
+    redirect: "/product",
+    meta: {
+      requireAuth: true
+    },
     children: [
       {
         path: "/product",
@@ -75,7 +79,7 @@ const router = new Router({
 router.beforeEach((to, from, next) => {
   if (to.meta.requireAuth) {
     // 判断该路由是否需要登录权限
-    if (localStorage.getItem("isLogin")) {
+    if (sessionStorage.getItem("isLogin")) {
       next();
     } else {
       next({

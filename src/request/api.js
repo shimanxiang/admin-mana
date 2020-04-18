@@ -132,6 +132,11 @@ export const login = param => {
   return post(`${baseUrl}/admin/adminLogin`, param);
 };
 
+// 退出
+export const loginOut = () => {
+  return post(`${baseUrl}/admin/adminLoginOut`);
+};
+
 // 发货
 export const deliver = param => {
   return post(`${baseUrl}/orderInfo/deliver`, param, {

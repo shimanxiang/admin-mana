@@ -76,7 +76,8 @@ export default {
           if (res.status === 200 && res.data.resultCode === "000001") {
             this.$store.commit("setPersonInfo", this.formData);
             this.$store.commit("setIsLogin", true);
-            localStorage.setItem("isLogin", "true");
+            sessionStorage.setItem("isLogin", "true");
+            document.cookie = "JSESSIONID=" + res.data.resultObject.sessionId;
             this.$message.success("登录成功");
             this.$router.push("/");
           } else {
@@ -86,7 +87,7 @@ export default {
         .catch(err => {
           console.log(err);
           this.isLoading = false;
-          localStorage.setItem("isLogin", "true");
+          sessionStorage.setItem("isLogin", "true");
           this.$router.push("/");
           this.$message.error("登录失败");
         });

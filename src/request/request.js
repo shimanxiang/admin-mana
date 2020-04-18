@@ -2,19 +2,24 @@ import axios from "axios";
 import qs from "qs";
 import router from "../router";
 
+axios.defaults.withCredentials = true; //让ajax携带cookie
+
 // 创建axios实例
 const service = axios.create({
   timeout: 30000 // 请求超时时间
 });
-// 添加request拦截器
-service.interceptors.request.use(
-  config => {
+
+// http request拦截器 添加一个请求拦截器
+axios.interceptors.request.use(
+  function(config) {
     return config;
   },
-  error => {
-    Promise.reject(error);
+  function(error) {
+    // Do something with request error
+    return Promise.reject(error);
   }
 );
+
 // 添加respone拦截器
 service.interceptors.response.use(
   response => {
