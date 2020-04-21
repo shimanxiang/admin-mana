@@ -40,11 +40,7 @@
             }}</span>
           </template>
         </el-table-column>
-        <el-table-column label="是否已删除">
-          <template slot-scope="scope">
-            <span>{{ scope.row.isDel == "1" ? "是" : "否" }}</span>
-          </template>
-        </el-table-column>
+        <el-table-column label="状态" prop="statusDesc"> </el-table-column>
         <el-table-column label="最低限制金额" prop="limitPrice">
         </el-table-column>
         <el-table-column label="限制商品名称" prop="limitProductName">

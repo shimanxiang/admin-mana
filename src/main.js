@@ -29,6 +29,8 @@ import {
   PageHeader,
   Dialog,
   MessageBox,
+  Avatar,
+  Autocomplete,
   Card
 } from "element-ui";
 
@@ -56,6 +58,8 @@ Vue.use(DatePicker);
 Vue.use(PageHeader);
 Vue.use(Dialog);
 Vue.use(Card);
+Vue.use(Avatar);
+Vue.use(Autocomplete);
 
 let notChildren = menus.filter(val => !val["children"]);
 let commonChildren = menus.filter(val => val["children"]);

@@ -63,16 +63,83 @@
         <div>身份：{{ orderInfo.user.identity }}</div>
         <div>积分：{{ orderInfo.user.integral }}</div>
       </div>
+      <div v-if="orderInfo.comments.length > 0" class="order-comment">
+        <div class="title mrt10">评论信息</div>
+        <div
+          class="comment-list"
+          v-for="(item, index) in orderInfo.comments"
+          :key="item.id"
+        >
+          <div>
+            <el-avatar size="medium" :src="orderInfo.user.headImg"></el-avatar>
+            <div class="username">{{ item.userName }}</div>
+            <div class="createTime">{{ item.createTime }}</div>
+          </div>
+          <div class="comment-content">
+            {{ item.content }}
+          </div>
+          <div class="comment-btn" v-if="!item.answer">
+            <el-button
+              type="primary"
+              size="mini"
+              @click="showDialog(item.id, index)"
+              >回复</el-button
+            >
+          </div>
+          <div class="reply-comment" v-else>
+            {{ item.answer }}
+          </div>
+        </div>
+      </div>
     </el-card>
+    <el-dialog
+      title="回复评论"
+      :visible.sync="dialogVisible"
+      width="45%"
+      append-to-body
+    >
+      <el-form
+        :model="commentForm"
+        :rules="rules"
+        ref="commentForm"
+        label-width="80px"
+        class="spec-form-inline"
+      >
+        <el-form-item label="回复内容" prop="content">
+          <el-input v-model="commentForm.content" type="textarea"></el-input>
+        </el-form-item>
+      </el-form>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="dialogVisible = false">取 消</el-button>
+        <el-button type="primary" @click="replyComment">确 定</el-button>
+      </span>
+    </el-dialog>
   </div>
 </template>
 <script>
-import { getOrderDetailInfo } from "@/request/api";
+import { getOrderDetailInfo, responseComment } from "@/request/api";
 export default {
   data() {
     return {
+      dialogVisible: false,
       loading: false,
-      orderInfo: {}
+      commentIndex: -1,
+      orderInfo: {},
+      commentId: "",
+      commentForm: {
+        content: ""
+      },
+      rules: {
+        content: [
+          { required: true, message: "请输入回复内容", trigger: "blur" },
+          {
+            min: 1,
+            max: 200,
+            message: "长度在 1 到 200 个字符",
+            trigger: "blur"
+          }
+        ]
+      }
     };
   },
   props: {
@@ -86,6 +153,33 @@ export default {
     }
   },
   methods: {
+    showDialog(id, index) {
+      this.commentForm.content = "";
+      this.commentId = id;
+      this.commentIndex = index;
+      this.dialogVisible = true;
+    },
+    replyComment() {
+      if (this.loading) return false;
+      this.loading = true;
+      responseComment({
+        answer: this.commentForm.content,
+        commentId: this.commentId
+      })
+        .then(res => {
+          this.loading = false;
+          if (res.status === 200 && res.data.resultCode === "000001") {
+            this.dialogVisible = false;
+            this.orderInfo.comments[
+              this.commentIndex
+            ].answer = this.commentForm.content;
+          }
+        })
+        .catch(error => {
+          this.loading = false;
+          console.log(error);
+        });
+    },
     getOrderDetailInfo() {
       if (this.loading) return false;
       this.loading = true;
@@ -95,7 +189,6 @@ export default {
         .then(res => {
           this.loading = false;
           if (res.status === 200 && res.data.resultCode === "000001") {
-            console.log(res);
             this.orderInfo = res.data.resultObject;
           }
         })
@@ -125,6 +218,37 @@ export default {
   .order-info {
     div {
       margin-bottom: 15px;
+    }
+  }
+  .order-comment {
+    .comment-list {
+      margin-bottom: 15px;
+    }
+    .username {
+      display: inline-block;
+      height: 40px;
+      vertical-align: top;
+      line-height: 40px;
+      margin-left: 10px;
+    }
+    .createTime {
+      float: right;
+      line-height: 40px;
+      color: #ccc;
+    }
+    .comment-content {
+      margin-left: 45px;
+    }
+    .comment-btn {
+      text-align: right;
+      margin: 10px 0;
+    }
+    .reply-comment {
+      background: #f5f5f5;
+      border-radius: 6px;
+      padding: 10px;
+      margin-left: 45px;
+      margin-top: 10px;
     }
   }
   .order-header {

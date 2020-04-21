@@ -48,6 +48,18 @@ const menus = [
     name: "用户列表",
     meta: true,
     icon: "el-icon-user"
+  },
+  {
+    path: "/site",
+    name: "站点管理",
+    meta: true,
+    icon: "el-icon-location-outline"
+  },
+  {
+    path: "/notice",
+    name: "通知管理",
+    meta: true,
+    icon: "el-icon-alarm-clock"
   }
 ];
 

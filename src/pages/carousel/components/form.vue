@@ -39,8 +39,27 @@
           <el-option label="公告" value="N"></el-option>
         </el-select>
       </el-form-item>
-      <el-form-item label="跳转路径">
-        <el-input v-model="carouselForm.url"></el-input>
+      <el-form-item label="跳转商品" v-show="carouselForm.type == 'P'">
+        <el-autocomplete
+          v-model="queryStr"
+          :fetch-suggestions="querySearchAsync"
+          placeholder="请输入搜索关键字"
+          @select="handleSelect"
+        ></el-autocomplete>
+      </el-form-item>
+      <el-form-item label="跳转通知" v-show="carouselForm.type == 'N'">
+        <el-select
+          v-model="queryStr"
+          placeholder="请选择"
+          @change="noticeChange"
+        >
+          <el-option
+            :label="item.title"
+            :value="item.id"
+            v-for="item in noticeList"
+            :key="item.id"
+          ></el-option>
+        </el-select>
       </el-form-item>
       <el-form-item>
         <el-button type="primary" @click="submitForm('carouselForm')">{{
@@ -52,7 +71,12 @@
   </div>
 </template>
 <script>
-import { addCarousel, updateCarousel } from "@/request/api";
+import {
+  addCarousel,
+  updateCarousel,
+  getListProducts,
+  queryAllNotices
+} from "@/request/api";
 export default {
   data() {
     return {
@@ -62,6 +86,9 @@ export default {
           : "/api/file/fileUpload",
       loading: false,
       btnTxt: "立即创建",
+      queryStr: "",
+      productList: [],
+      noticeList: [],
       carouselForm: {
         image: "",
         id: "",
@@ -97,6 +124,61 @@ export default {
     }
   },
   methods: {
+    queryAllNotices() {
+      if (this.loading) return false;
+      this.loading = true;
+      queryAllNotices()
+        .then(res => {
+          this.loading = false;
+          if (res.status === 200 && res.data.resultCode === "000001") {
+            this.noticeList = res.data.resultObject;
+          }
+        })
+        .catch(() => {
+          this.loading = false;
+        });
+    },
+    getListProducts(cb) {
+      if (this.loading) return false;
+      this.loading = true;
+      getListProducts({
+        pageIndex: 1,
+        pageSize: 1000,
+        prodName: this.queryStr
+      })
+        .then(res => {
+          this.loading = false;
+          if (res.status === 200 && res.data.resultCode === "000001") {
+            this.productList = [];
+            for (let i = 0; i < res.data.resultObject.list.length; i++) {
+              const element = res.data.resultObject.list[i];
+              this.productList.push({
+                value: element.prodName,
+                id: element.id
+              });
+            }
+            cb();
+          }
+        })
+        .catch(error => {
+          this.loading = false;
+          console.log(error);
+        });
+    },
+    querySearchAsync(queryString, cb) {
+      if (queryString) {
+        this.queryStr = queryString;
+        this.getListProducts(() => {
+          cb(this.productList);
+        });
+      }
+    },
+    handleSelect(item) {
+      this.carouselForm.url = "/pages/goodDetail/main?id=" + item.id;
+    },
+    noticeChange(val) {
+      this.carouselForm.url = "/pages/notice/main?id=" + val;
+    },
     submitForm(formName) {
       this.$refs[formName].validate(valid => {
         if (valid) {
@@ -169,6 +251,7 @@ export default {
         url: "",
         image: ""
       };
+      this.queryStr = "";
       this.$refs[formName].resetFields();
       this.$emit("cancel");
     },
@@ -189,6 +272,9 @@ export default {
       }
       return isLt2M;
     }
+  },
+  mounted() {
+    this.queryAllNotices();
   }
 };
 </script>

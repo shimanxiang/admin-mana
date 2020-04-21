@@ -165,3 +165,47 @@ export const updateCategoryStatus = param => {
     "content-type": "application/x-www-form-urlencoded"
   });
 };
+
+// 查询优惠券状态 COUPON_STATUS
+export const getCouponStatus = param => {
+  return get(`${baseUrl}/dictionary/code`, param);
+};
+
+// 回复评论
+export const responseComment = param => {
+  return post(`${baseUrl}/orderInfo/responseComment`, param);
+};
+
+// 查询所有站点
+export const getListSites = () => {
+  return get(`${baseUrl}/site/listSites`);
+};
+
+// 新增站点
+export const addSites = param => {
+  return post(`${baseUrl}/site/addSite`, param);
+};
+
+// 删除站点
+export const deleteSize = param => {
+  return post(`${baseUrl}/site/deleteSize`, param, {
+    "content-type": "application/x-www-form-urlencoded"
+  });
+};
+
+// 查询所有通知
+export const queryAllNotices = () => {
+  return get(`${baseUrl}/notice/queryAllNotices`);
+};
+
+// 新增公告
+export const addNotice = param => {
+  return post(`${baseUrl}/notice/addNotice`, param);
+};
+
+// 删除公告
+export const deleteNotice = param => {
+  return post(`${baseUrl}/notice/deleteNotice`, param, {
+    "content-type": "application/x-www-form-urlencoded"
+  });
+};

@@ -20,6 +20,10 @@ const CouponPage = () =>
   import(/* webpackChunkName: "coupon" */ "@/pages/coupon/index.vue");
 const CarouselPage = () =>
   import(/* webpackChunkName: "carousel" */ "@/pages/carousel/index.vue");
+const SitePage = () =>
+  import(/* webpackChunkName: "carousel" */ "@/pages/site/index.vue");
+const NoticePage = () =>
+  import(/* webpackChunkName: "carousel" */ "@/pages/notice/index.vue");
 const NotFoundPage = () =>
   import(/* webpackChunkName: "List" */ "@/pages/404.vue");
 
@@ -51,6 +55,14 @@ let commonComponents = [
       {
         path: "/coupon",
         component: CouponPage
+      },
+      {
+        path: "/site",
+        component: SitePage
+      },
+      {
+        path: "/notice",
+        component: NoticePage
       },
       {
         path: "/carousel",

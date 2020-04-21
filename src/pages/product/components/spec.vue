@@ -42,8 +42,16 @@
     <div class="spec-title">规格列表</div>
     <el-table :data="specList" border>
       <el-table-column prop="specDesc" label="规格描述"></el-table-column>
-      <el-table-column prop="originalPrice" label="原价"></el-table-column>
-      <el-table-column prop="presentPrice" label="现价"></el-table-column>
+      <el-table-column label="原价">
+        <template slot-scope="scope">
+          <span>¥{{ scope.row.originalPrice }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="现价">
+        <template slot-scope="scope">
+          <span>¥{{ scope.row.presentPrice }}</span>
+        </template>
+      </el-table-column>
       <el-table-column label="状态">
         <template slot-scope="scope">
           <span>{{ scope.row.status == "1" ? "正常订购" : "已售完" }}</span>
@@ -140,7 +148,7 @@ export default {
       rules: {
         specDesc: [
           { required: true, message: "请输入规格描述", trigger: "blur" },
-          { min: 3, max: 5, message: "长度在 1 到 5 个字符", trigger: "blur" }
+          { min: 1, max: 5, message: "长度在 1 到 5 个字符", trigger: "blur" }
         ],
         originalPrice: [
           { required: true, message: "请输入原价", trigger: "blur" }

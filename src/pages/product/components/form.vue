@@ -78,6 +78,7 @@
           :file-list="productForm.fileList"
           :on-success="handlePictureCardSuccess"
           :before-upload="beforeAvatarUpload"
+          :on-remove="handleRemove"
         >
           <i class="el-icon-plus"></i>
         </el-upload>
@@ -250,11 +251,6 @@ export default {
       if (this.loading) return false;
       this.loading = true;
       let obj = Object.assign({}, this.productForm);
-      obj.secondImg = [];
-      for (let i = 0; i < this.productForm.fileList.length; i++) {
-        obj.secondImg.push(this.productForm.fileList[i].url);
-      }
-      obj.secondImg = obj.secondImg.join();
       updateProduct(obj)
         .then(res => {
           if (res.status === 200 && res.data.resultCode === "000001") {
@@ -298,8 +294,7 @@ export default {
         secondImg: "",
         fileList: []
       }),
-        console.log("resetForm", this.$refs[formName]);
-      this.$refs[formName].resetFields();
+        this.$refs[formName].resetFields();
       this.$emit("cancel");
     },
     handleAvatarSuccess(res) {
@@ -327,6 +322,13 @@ export default {
       this.productForm.secondImg = [];
       for (let i = 0; i < this.productForm.fileList.length; i++) {
         this.productForm.secondImg.push(this.productForm.fileList[i].url);
+      }
+      this.productForm.secondImg = this.productForm.secondImg.join();
+    },
+    handleRemove(res, file) {
+      this.productForm.secondImg = [];
+      for (let i = 0; i < file.length; i++) {
+        this.productForm.secondImg.push(file[i].url);
       }
       this.productForm.secondImg = this.productForm.secondImg.join();
     }
