@@ -12,7 +12,8 @@
             <img :src="scope.row.image" alt="" srcset="" />
           </template>
         </el-table-column>
-        <el-table-column label="跳转路径" prop="url"> </el-table-column>
+        <el-table-column label="跳转商品/公告名称" prop="subName">
+        </el-table-column>
         <el-table-column label="轮播类型">
           <template slot-scope="scope">
             <span>{{ scope.row.type == "P" ? "商品" : "公告" }}</span>

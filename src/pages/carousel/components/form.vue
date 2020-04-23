@@ -95,7 +95,8 @@ export default {
         url: "",
         status: "",
         sort: "",
-        type: ""
+        type: "",
+        subId: ""
       },
       rules: {
         image: [{ required: true, message: "请上传轮播图", trigger: "change" }],
@@ -175,9 +176,11 @@ export default {
     },
     handleSelect(item) {
       this.carouselForm.url = "/pages/goodDetail/main?id=" + item.id;
+      this.carouselForm.subId = item.id;
     },
     noticeChange(val) {
       this.carouselForm.url = "/pages/notice/main?id=" + val;
+      this.carouselForm.subId = val;
     },
     submitForm(formName) {
       this.$refs[formName].validate(valid => {
@@ -201,7 +204,8 @@ export default {
         url: this.carouselForm.url,
         type: this.carouselForm.type,
         sort: this.carouselForm.sort,
-        status: this.carouselForm.status
+        status: this.carouselForm.status,
+        subId: this.carouselForm.subId
       })
         .then(res => {
           this.loading = false;
@@ -226,7 +230,8 @@ export default {
         url: this.carouselForm.url,
         type: this.carouselForm.type,
         sort: this.carouselForm.sort,
-        status: this.carouselForm.status
+        status: this.carouselForm.status,
+        subId: this.carouselForm.subId
       })
         .then(res => {
           this.loading = false;
@@ -249,7 +254,8 @@ export default {
         status: "",
         type: "",
         url: "",
-        image: ""
+        image: "",
+        subId: ""
       };
       this.queryStr = "";
       this.$refs[formName].resetFields();

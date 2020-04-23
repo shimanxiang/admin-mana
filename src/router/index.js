@@ -4,6 +4,8 @@ Vue.use(Router);
 
 const IndexLoadPage = () =>
   import(/* webpackChunkName: "Index" */ "@/pages/index/Index.vue");
+const HomeLoadPage = () =>
+  import(/* webpackChunkName: "Index" */ "@/pages/home/index.vue");
 const LoginLoadPage = () =>
   import(/* webpackChunkName: "Login" */ "@/pages/login/Login.vue");
 const SettingLoadPage = () =>
@@ -31,11 +33,14 @@ let commonComponents = [
   {
     path: "/",
     component: IndexLoadPage,
-    redirect: "/product",
     meta: {
       requireAuth: true
     },
     children: [
+      {
+        path: "/",
+        component: HomeLoadPage
+      },
       {
         path: "/product",
         component: ProductListPage

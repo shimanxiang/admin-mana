@@ -10,8 +10,8 @@
         <el-table-column label="站点负责人" prop="name"> </el-table-column>
         <el-table-column label="联系方式" prop="telephone"> </el-table-column>
         <el-table-column label="所在省份" prop="code1"> </el-table-column>
-        <el-table-column label="所在市" prop="code1"> </el-table-column>
-        <el-table-column label="所在区/县" prop="code1"> </el-table-column>
+        <el-table-column label="所在市" prop="code2"> </el-table-column>
+        <el-table-column label="所在区/县" prop="code3"> </el-table-column>
         <el-table-column label="详细地址" prop="addressDetails">
         </el-table-column>
         <el-table-column label="操作">

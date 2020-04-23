@@ -209,3 +209,8 @@ export const deleteNotice = param => {
     "content-type": "application/x-www-form-urlencoded"
   });
 };
+
+// 查询首页数量
+export const getIndexNum = () => {
+  return get(`${baseUrl}/index/indexNum`);
+};

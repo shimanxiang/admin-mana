@@ -1,10 +1,10 @@
 const menus = [
-  // {
-  //   path: "/",
-  //   name: "首页",
-  //   meta: true,
-  //   icon: "el-icon-house"
-  // },
+  {
+    path: "/",
+    name: "首页",
+    meta: true,
+    icon: "el-icon-house"
+  },
   {
     path: "/listManage",
     name: "商品管理",
