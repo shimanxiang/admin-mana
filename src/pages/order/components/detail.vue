@@ -25,6 +25,16 @@
         <div>使用积分数：{{ orderInfo.integral }}</div>
         <div>送货方式：{{ orderInfo.deleveryTypeDesc }}</div>
         <div>配送时间：{{ orderInfo.userDeliveryTime }}</div>
+        <div v-if="orderInfo.site">
+          自提站点负责人：{{ orderInfo.site.name }}
+        </div>
+        <div v-if="orderInfo.site">
+          自提站点电话：{{ orderInfo.site.telephone }}
+        </div>
+        <div v-if="orderInfo.site">
+          自提站点地址：{{ orderInfo.site.code1 }}{{ orderInfo.site.code2
+          }}{{ orderInfo.site.code3 }}{{ orderInfo.site.addressDetails }}
+        </div>
         <div v-if="orderInfo.address">
           收货人姓名：{{ orderInfo.address.name }}
         </div>
@@ -63,7 +73,10 @@
         <div>身份：{{ orderInfo.user.identity }}</div>
         <div>积分：{{ orderInfo.user.integral }}</div>
       </div>
-      <div v-if="orderInfo.comments.length > 0" class="order-comment">
+      <div
+        v-if="orderInfo.comments && orderInfo.comments.length > 0"
+        class="order-comment"
+      >
         <div class="title mrt10">评论信息</div>
         <div
           class="comment-list"
