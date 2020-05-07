@@ -214,3 +214,13 @@ export const deleteNotice = param => {
 export const getIndexNum = () => {
   return get(`${baseUrl}/index/indexNum`);
 };
+
+// 分页查询评论
+export const getComments = param => {
+  return get(`${baseUrl}/comment/pageComments`, param);
+};
+
+// 审核评论 1通过 2不通过
+export const updateComment = param => {
+  return get(`${baseUrl}/comment/updateComment`, param);
+};

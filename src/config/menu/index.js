@@ -44,6 +44,12 @@ const menus = [
     // }],
   },
   {
+    path: "/comment",
+    name: "评论审核",
+    meta: true,
+    icon: "el-icon-chat-line-square"
+  },
+  {
     path: "/user",
     name: "用户列表",
     meta: true,

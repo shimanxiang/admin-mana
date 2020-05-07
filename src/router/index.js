@@ -28,7 +28,8 @@ const NoticePage = () =>
   import(/* webpackChunkName: "carousel" */ "@/pages/notice/index.vue");
 const NotFoundPage = () =>
   import(/* webpackChunkName: "List" */ "@/pages/404.vue");
-
+const CommentPage = () =>
+  import(/* webpackChunkName: "List" */ "@/pages/comment/index.vue");
 let commonComponents = [
   {
     path: "/",
@@ -60,6 +61,10 @@ let commonComponents = [
       {
         path: "/coupon",
         component: CouponPage
+      },
+      {
+        path: "/comment",
+        component: CommentPage
       },
       {
         path: "/site",

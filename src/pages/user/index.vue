@@ -44,6 +44,7 @@
         class="formPagination"
         background
         layout="prev, pager, next"
+        :page-size="pageSize"
         :total="total"
         @current-change="currentChange"
       ></el-pagination>
@@ -78,7 +79,7 @@
 </template>
 
 <script>
-import { getUserList, getCouponList, distributionCoupon } from "@/request/api";
+import { getUserList, distributionCoupon } from "@/request/api";
 import couponUser from "./components/coupon.vue";
 export default {
   name: "userlist",
@@ -118,21 +119,6 @@ export default {
     showUserList() {
       this.isCoupon = false;
     },
-    getCouponList() {
-      getCouponList({
-        pageIndex: 1,
-        pageSize: 999
-      })
-        .then(res => {
-          this.loading = false;
-          if (res.status === 200 && res.data.resultCode === "000001") {
-            this.couponListAll = res.data.resultObject.list;
-          }
-        })
-        .catch(error => {
-          console.log(error);
-        });
-    },
     getUserList() {
       if (this.loading) return false;
       this.loading = true;
@@ -145,6 +131,7 @@ export default {
           this.loading = false;
           if (res.status === 200 && res.data.resultCode === "000001") {
             this.userList = res.data.resultObject.list;
+            this.total = res.data.resultObject.total;
           }
         })
         .catch(error => {
@@ -200,7 +187,6 @@ export default {
     }
   },
   mounted() {
-    this.getCouponList();
     this.getUserList();
   }
 };

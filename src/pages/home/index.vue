@@ -9,19 +9,19 @@
       </el-col>
       <el-col :span="6">
         <el-card shadow="always" class="card-box">
-          <div class="num">¥{{ data.currentDayMoney || "¥0" }}</div>
+          <div class="num">¥{{ data.currentDayMoney || "0" }}</div>
           <div class="text">今日营业额</div>
         </el-card>
       </el-col>
       <el-col :span="6">
         <el-card shadow="always" class="card-box">
-          <div class="num">¥{{ data.currentMonthMoney || "¥0" }}</div>
+          <div class="num">¥{{ data.currentMonthMoney || "0" }}</div>
           <div class="text">月营业额</div>
         </el-card>
       </el-col>
       <el-col :span="6">
         <el-card shadow="always" class="card-box">
-          <div class="num">¥{{ data.totalMoney || "¥0" }}</div>
+          <div class="num">¥{{ data.totalMoney || "0" }}</div>
           <div class="text">总营业额</div>
         </el-card>
       </el-col>
@@ -45,10 +45,18 @@
           <div class="text">下单用户数量</div>
         </el-card>
       </el-col>
-      <el-col :span="6">
-        <el-card shadow="always" class="card-box">
+      <el-col :span="6" @click.native="gotoOrder">
+        <el-card shadow="always" class="card-box pointer">
           <div class="num">{{ data.waitDeliverOrderNum || 0 }}</div>
           <div class="text">待发货订单数量</div>
+        </el-card>
+      </el-col>
+    </el-row>
+    <el-row :gutter="20" class="mat15">
+      <el-col :span="6" @click.native="gotoComment">
+        <el-card shadow="always" class="card-box pointer">
+          <div class="num">{{ data.waitCheckComment || 0 }}</div>
+          <div class="text">待审核评论数</div>
         </el-card>
       </el-col>
     </el-row>
@@ -82,6 +90,18 @@ export default {
           console.log(err);
           this.$message.error("查询失败");
         });
+    },
+    gotoComment() {
+      console.log(this.$router);
+      this.$router.push({
+        path: "/comment"
+      });
+    },
+    gotoOrder() {
+      this.$router.push({
+        path: "/orderlist",
+        query: { status: 2 } // 待发货
+      });
     }
   }
 };
@@ -103,6 +123,9 @@ export default {
   }
   .mat15 {
     margin-top: 15px;
+  }
+  .pointer {
+    cursor: pointer;
   }
 }
 </style>

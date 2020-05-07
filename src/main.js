@@ -31,11 +31,13 @@ import {
   MessageBox,
   Avatar,
   Autocomplete,
+  Rate,
   Card
 } from "element-ui";
 
 Vue.config.productionTip = false;
 
+Vue.use(Rate);
 Vue.use(Button);
 Vue.use(Input);
 Vue.use(Row);

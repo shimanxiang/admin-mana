@@ -55,6 +55,7 @@
         class="formPagination"
         background
         layout="prev, pager, next"
+        :page-size="pageSize"
         :total="total"
         @current-change="currentChange"
       ></el-pagination>
@@ -156,6 +157,9 @@ export default {
   mounted() {
     if (this.$route.query.name) {
       this.searchValue = decodeURIComponent(this.$route.query.name);
+    }
+    if (this.$route.query.status) {
+      this.status = this.$route.query.status.toString();
     }
     this.getOrderList();
   }

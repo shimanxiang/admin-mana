@@ -47,6 +47,7 @@
         class="formPagination"
         background
         layout="prev, pager, next"
+        :page-size="pageSize"
         :total="total"
         @current-change="currentChange"
       ></el-pagination>
@@ -107,6 +108,7 @@ export default {
           this.loading = false;
           if (res.status === 200 && res.data.resultCode === "000001") {
             this.couponList = res.data.resultObject.list;
+            this.total = res.data.resultObject.total;
           }
         })
         .catch(error => {
